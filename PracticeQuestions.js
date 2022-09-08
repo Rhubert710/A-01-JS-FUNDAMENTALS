@@ -7,11 +7,21 @@
 const x = 6
 
 // 1. Write a function that takes 2 numbers as arguments and returns the sum of both numbers and the variable "x" using without using arrow functions.
+function adder (a, b) 
+{
+  let sum = a + b + x;
+  return sum
+}
+console.log(adder(5,7));
 
 // 2. Write a function that takes 2 numbers as arguments and returns the sum of both numbers and the variable "x", using arrow functions.
 
-// 3. Write a function that returns another function. (use arrow functions please)
+let sum = (a,b) => a + b + x;
+console.log(sum(5,7));
 
+// 3. Write a function that returns another function. (use arrow functions please)
+const q3 = (a,b) => sum(a,b);
+console.log(q3(5,7));
 
 // 4. Given the following code explain why the function that returns from getFunction still has access to variable "y" even when "y" is not a global variable.
 
@@ -26,6 +36,9 @@ const getFunction = () => {
 
 console.log(getFunction()(2))
 
+// q4 Both y and insideFunc are defined inside get funk do you have they same scope. Any variables defined in insideFunc, getFunction will not have access to.
+console.log('Both y and insideFunc are defined inside get funk do you have they same scope. Any variables defined in insideFunc, getFunction will not have access to.');
+
 // 5. write a function that takes "couldThrowError()" as a callback argument.
 // within that function call "couldThrowError" and and log the result to the console.
 // Make sure to handle errors that could be thrown by "couldThrowError()"
@@ -38,6 +51,19 @@ const couldThrowError = () => {
   }
   
   return 'success'
+}
+
+function q5 (callBack)
+{
+  try
+  {
+    callBack
+    console.log('success!');
+  }
+  catch
+  {
+    console.log('sorry, there was an error');
+  }
 }
 
 
@@ -76,12 +102,27 @@ const userData = [
 // 5. Given the data above, use ".map" to make an array of objects.
 // Each object should have the id of the user and the amount of favorite foods they have.
 // example: [{id: '111', favoriteFoods: 2}]
+let arr= userData.map((user) => {
 
+  const id = user.id;
+  const favoriteFoods = user.favorites.food.length;
+
+  return { id, favoriteFoods };
+});
+
+console.log(arr);
 
 // 6. Given the data above, use ".reduce" to make an array of all the names
 // of the people who have pizza as one of their favorite foods.
 // example: ['Peter', 'Mary']
+let q6 = userData.reduce((arr, curr) => {
+  if (curr.favorites.food.includes("pizza")) {
+    arr.push(curr.name);
+  }
+  return arr;
+}, []);
 
+console.log(q6);
 
 // 7. Show an an example of a switch statement being used
 
@@ -111,14 +152,27 @@ const userPersonalData = {
 //  accomplishments: ['won award for being good gamer', 'won 1st win', 'got good score on the weekend'],
 // }
 
+const userObject = { 
+
+  ...userPersonalData, 
+  ...userGameData 
+
+};
+console.log(userObject);
+
 
 
 
 
 // 9. Make a copy of your new user object but override the birthday to december 31st
- 
+
+let copy = {...userObject, birthday:'jan 2'}
+console.log(copy);
 
 // 10. Use the spread operator to make a copy of the accomplishments array and store it in a new variable
+
+let accomplishments = [...userObject.accomplishments];
+console.log(accomplishments);
 
 
 
@@ -135,15 +189,19 @@ var user = {
   },
  };
 
+ let [...favFood] = user.favoriteThings.food;
+ console.log(favFood);
  
 // 12. Once you have grabbed the favorite foods. Destructure the food array to grab only the first 2 values. //
-
+let [a,b] = favFood;
+console.log(a, b);
 
 // 13. use object destructuring and the rest operator to transform the following array into 3 variables: name, age, and food. 
 //    the food variable should have all the array items starting from the third one.
 const data = ['peter', '34', 'apple', 'oranges', 'pizza', 'tacos'];
 
-
+let [name, age, ...food] = data;
+console.log(name, age, food);
 
 // 14. use object destructuring to grab the following from the userInfo object: 
 // - The user's name and in a constant named userName.
@@ -162,6 +220,14 @@ const userInfo = {
     },
   },
 };
+
+const { name: userName, favorites:{needs:{food:favoriteFood}}, favorites:{wants:{things: [favoriteThing, secondfavoriteThing]}} }= userInfo;
+
+console.log(userName, favoriteFood, favoriteThing, secondfavoriteThing);
+
+
+
+
 
 var fetchData = () => new Promise((resolve, reject) => {
   console.log('fetchingData from imaginary database')
@@ -192,7 +258,7 @@ var fetchData = () => new Promise((resolve, reject) => {
   setTimeout(() => {
        try {
          // fetchingData from imaginary database
-         if((Math.ceil(Math.random() * 2)) < 2){
+         if(false){
            throw new Error('Error!')
          }
          resolve({name: 'john', age:42})
@@ -203,11 +269,28 @@ var fetchData = () => new Promise((resolve, reject) => {
 });
 
 
+
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 15. Call fetchData (which returns a promise) and use the .then()  method to log the value the promise resolves with to the javascript console.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+fetchData().then(
+  (value) => {
+
+    console.log(value);
+
+  }
+);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 16. Call fetchData (which returns a promise) and use the async/await method to log the value the promise resolves with to the javascript console.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const q16= async () => {
+
+    const value = await fetchData();
+    console.log(value);
+
+};
+
+q16();
